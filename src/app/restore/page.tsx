@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { RestoreWizard } from '@/components/restore/RestoreWizard'
 import { StatusBadge } from '@/components/common/StatusBadge'
 import { formatRelativeTime, formatDateTime, formatBytes } from '@/lib/utils'
-import { RotateCcw } from 'lucide-react'
+import { RollbackButton } from '@/components/restore/RollbackButton'
 
 export default async function RestorePage() {
   const supabase = await createClient()
@@ -48,7 +48,7 @@ export default async function RestorePage() {
                   <span className="text-xs text-gray-400 capitalize">{log.restore_type.replace(/_/g, ' ')}</span>
                   <StatusBadge status={log.status} />
                   {log.status === 'completed' && log.safety_snapshot_id && (
-                    <RollbackButton restoreLogId={log.id} />
+                    <RollbackButton restoreLogId={log.id} snapshotName={(log.dr_snapshots as any)?.name} />
                   )}
                 </div>
               </div>
@@ -57,21 +57,5 @@ export default async function RestorePage() {
         </div>
       )}
     </div>
-  )
-}
-
-function RollbackButton({ restoreLogId }: { restoreLogId: string }) {
-  return (
-    <form action={async () => {
-      'use server'
-      // Rollback is handled client-side via API
-    }}>
-      <a
-        href={`/api/restore/${restoreLogId}/rollback`}
-        className="flex items-center gap-1 px-2 py-1 text-xs font-medium text-orange-700 border border-orange-300 rounded-lg hover:bg-orange-50"
-      >
-        <RotateCcw className="w-3 h-3" /> Rollback
-      </a>
-    </form>
   )
 }

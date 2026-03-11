@@ -4,6 +4,7 @@ import { StatusBadge } from '@/components/common/StatusBadge'
 import { formatBytes, formatRelativeTime, formatDateTime } from '@/lib/utils'
 import { Database, Plus, Eye, RotateCcw } from 'lucide-react'
 import { CreateSnapshotButton } from '@/components/snapshots/CreateSnapshotButton'
+import { ManualBackupButton } from '@/components/snapshots/ManualBackupButton'
 
 export default async function SnapshotsPage() {
   const supabase = await createClient()
@@ -19,7 +20,10 @@ export default async function SnapshotsPage() {
           <h2 className="text-xl font-semibold text-gray-900">Snapshots</h2>
           <p className="text-sm text-gray-500 mt-1">Browse and manage all database backup snapshots</p>
         </div>
-        <CreateSnapshotButton />
+        <div className="flex items-center gap-3">
+          <ManualBackupButton />
+          <CreateSnapshotButton />
+        </div>
       </div>
 
       {/* Snapshot List */}

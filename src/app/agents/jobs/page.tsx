@@ -3,6 +3,8 @@ import { StatusBadge } from '@/components/common/StatusBadge'
 import { ProgressBar } from '@/components/common/ProgressBar'
 import { formatRelativeTime, formatDuration } from '@/lib/utils'
 import { ScrollText } from 'lucide-react'
+import { LiveJobMonitor } from '@/components/jobs/LiveJobMonitor'
+import { TriggerBackupButton } from '@/components/jobs/TriggerBackupButton'
 
 export default async function JobQueuePage() {
   const supabase = await createClient()
@@ -17,9 +19,12 @@ export default async function JobQueuePage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-semibold text-gray-900">Job Queue</h2>
-        <p className="text-sm text-gray-500 mt-1">Monitor all backup, restore, and verification jobs</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900">Job Queue</h2>
+          <p className="text-sm text-gray-500 mt-1">Monitor all backup, restore, and verification jobs</p>
+        </div>
+        <TriggerBackupButton />
       </div>
 
       {/* Stats */}
@@ -34,6 +39,8 @@ export default async function JobQueuePage() {
           )
         })}
       </div>
+
+      <LiveJobMonitor />
 
       {/* Active Jobs */}
       {active.length > 0 && (

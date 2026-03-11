@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { StatusBadge } from '@/components/common/StatusBadge'
 import { formatRelativeTime } from '@/lib/utils'
-import { Bot, Activity, Terminal } from 'lucide-react'
+import { Bot, Activity } from 'lucide-react'
 
 export default async function AgentsPage() {
   const supabase = await createClient()
@@ -25,14 +25,19 @@ export default async function AgentsPage() {
         </div>
       </div>
 
-      {/* Start command hint */}
-      <div className="flex items-start gap-3 p-4 bg-gray-900 rounded-xl">
-        <Terminal className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
-        <div>
-          <div className="text-sm font-medium text-gray-300">Start all agents</div>
-          <code className="text-sm text-green-400 font-mono">npm run agents</code>
-          <div className="text-xs text-gray-500 mt-1">Or start individually: <code className="text-green-400">npm run agent:backup</code></div>
-        </div>
+      {/* Vercel Cron info */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        {[
+          { label: 'Backup Agent', schedule: 'Daily at 2:00 AM', endpoint: '/api/cron/backup', color: 'bg-blue-50 border-blue-200 text-blue-800' },
+          { label: 'Verify Agent', schedule: 'Every 30 minutes', endpoint: '/api/cron/verify', color: 'bg-purple-50 border-purple-200 text-purple-800' },
+          { label: 'Cleanup Agent', schedule: 'Daily at 3:00 AM', endpoint: '/api/cron/cleanup', color: 'bg-gray-50 border-gray-200 text-gray-700' },
+        ].map(cron => (
+          <div key={cron.endpoint} className={`p-4 rounded-xl border ${cron.color}`}>
+            <div className="font-semibold text-sm">{cron.label}</div>
+            <div className="text-xs mt-0.5 opacity-75">{cron.schedule}</div>
+            <div className="text-xs font-mono mt-2 opacity-60">{cron.endpoint}</div>
+          </div>
+        ))}
       </div>
 
       {/* Agent Cards */}
