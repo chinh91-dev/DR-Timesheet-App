@@ -1,9 +1,11 @@
 'use client'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import {
-  LayoutDashboard, Database, RotateCcw, Bot, ScrollText, Settings, Shield
+  LayoutDashboard, Database, RotateCcw, Bot, ScrollText, Settings, Shield, LogOut
 } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
+import type { User } from '@supabase/supabase-js'
 
 const navItems = [
   { href: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -15,8 +17,16 @@ const navItems = [
   { href: '/settings', label: 'Settings', icon: Settings },
 ]
 
-export function Sidebar() {
+export function Sidebar({ user }: { user?: User }) {
   const pathname = usePathname()
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.push('/login')
+    router.refresh()
+  }
 
   return (
     <aside className="w-64 bg-white border-r border-gray-200 flex flex-col">
@@ -55,9 +65,21 @@ export function Sidebar() {
         })}
       </nav>
 
-      {/* Footer */}
-      <div className="px-6 py-4 border-t border-gray-200">
-        <div className="text-xs text-gray-400">DR App v1.0.0</div>
+      {/* User + Logout */}
+      <div className="px-4 py-4 border-t border-gray-200 space-y-2">
+        {user && (
+          <div className="px-3 py-2">
+            <div className="text-xs font-medium text-gray-700 truncate">{user.email}</div>
+            <div className="text-xs text-gray-400 mt-0.5">DR App v1.0.0</div>
+          </div>
+        )}
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-red-50 hover:text-red-600 transition-colors"
+        >
+          <LogOut className="w-4 h-4 flex-shrink-0" />
+          Sign out
+        </button>
       </div>
     </aside>
   )
