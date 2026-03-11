@@ -11,7 +11,7 @@ export function TriggerBackupButton() {
   const trigger = async () => {
     setState('running')
     try {
-      const res = await fetch('/api/cron/backup')
+      const res = await fetch('/api/backup/trigger', { method: 'POST' })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error ?? 'Failed')
       setState('done')

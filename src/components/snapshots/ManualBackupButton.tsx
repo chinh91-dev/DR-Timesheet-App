@@ -12,12 +12,7 @@ export function ManualBackupButton() {
     setState('running')
     setMessage('Starting backup...')
     try {
-      const res = await fetch('/api/cron/backup', {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET ?? ''}`,
-        },
-      })
+      const res = await fetch('/api/backup/trigger', { method: 'POST' })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error ?? 'Backup failed')
       setState('done')
