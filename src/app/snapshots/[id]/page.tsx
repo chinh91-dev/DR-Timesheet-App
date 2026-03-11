@@ -96,7 +96,7 @@ export default async function SnapshotDetailPage({ params }: PageProps) {
           <Detail label="Snapshot ID" value={snapshot.id} mono />
           <Detail label="Type" value={snapshot.snapshot_type} />
           <Detail label="Storage Path" value={snapshot.storage_path ?? '—'} mono />
-          <Detail label="Data Hash" value={snapshot.data_hash?.slice(0, 16) + '...' ?? '—'} mono />
+          <Detail label="Data Hash" value={snapshot.data_hash ? snapshot.data_hash.slice(0, 16) + '...' : '—'} mono />
           <Detail label="Created" value={formatRelativeTime(snapshot.created_at)} />
           <Detail label="Last Updated" value={formatRelativeTime(snapshot.updated_at)} />
         </dl>
